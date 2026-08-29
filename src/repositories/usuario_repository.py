@@ -2,7 +2,7 @@ from sqlite3 import Cursor
 from typing import Optional
 
 from src.database.conexao import conectar
-from src.schemas.usuario import Usuario
+from src.schemas.usuario import Usuario, UsuarioCadastro, UsuarioEditar
 
 
 
@@ -35,4 +35,43 @@ def consultar_todos() -> list[Usuario]:
     usuarios.append(usuario)
     return usuarios
 
+
+def cadastrar(usuario: UsuarioCadastro) -> Usuario:
+    sql = """INSERT INTO usuario 
+    (nome, email, telefone, data_nascimento)
+    VALUES (%s, %s, %s, %s)
+    """
+    with conectar() as conexao:
+        with conexao.cursor() as cursor:
+            cursor.execute(sql, (usuario.nome, usuario.email, usuario.telefone, usuario.data_nascimento))
+            novo_id = cursor.lastrowid
+            conexao.commit()
+    return Usuario(
+        id=novo_id,
+        nome=usuario.nome,
+        email=usuario.email,
+        telefone=usuario.telefone,
+        data_nascimento=usuario.data_nascimento
+    )
+
+
+
+def editar(id: int, usuario: UsuarioEditar):
+    sql = """UPDATE usuario SET 
+        nome=%s,
+        email=%s,
+        telefone=%s,
+        data_nascimento=%s,
+    WHERE id=%s
+    """
+    with conectar() as conexao:
+        with conexao.cursor() as cursor:
+            cursor.execute(sql, (
+                usuario.nome, 
+                usuario.email, 
+                usuario.telefone, 
+                usuario.data_nascimento, 
+                id,
+            ))
+            conexao.commit()
 
