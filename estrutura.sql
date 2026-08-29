@@ -70,4 +70,4 @@ CREATE TABLE solicitacao (
     FOREIGN KEY (id_endereco) REFERENCES endereco(id),
     FOREIGN KEY (id_servico) REFERENCES servico(id),
     FOREIGN KEY (id_funcionario) REFERENCES funcionario(id)
-);
+)
