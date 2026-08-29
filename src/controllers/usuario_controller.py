@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException, status
 from src.repositories import usuario_repository
 from src.schemas.usuario import UsuarioCadastro, UsuarioEditar
 
-router: APIRouter = APIRouter(prefix="/usuarios")
+router: APIRouter = APIRouter(prefix="/usuario")
 
 
 
@@ -31,3 +31,11 @@ def editar(id: int, usuario: UsuarioEditar):
     return {
         "status": "ok"
     }
+
+
+@router.delete("/usuario/{id}")
+def apagar(id: int):
+    usuario_repository.apagar(id)
+    # N é a forma final, faremos diferente, falta tratar 404, deve ser um 
+    # 204 No content 
+    return {"status": "OK"}

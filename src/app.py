@@ -8,7 +8,7 @@ import sys
 # para que os imports `from src import .` funcionem corretamente
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from src.controllers import usuario_controller
+from src.controllers import endereco_controller, usuario_controller
 
 # Swagger => http://localhost:8000/docs
 
@@ -31,6 +31,7 @@ app.add_middleware(
 )
 
 app.include_router(usuario_controller.router)
+app.include_router(endereco_controller.router)
 
 
 if __name__ == "__main__":

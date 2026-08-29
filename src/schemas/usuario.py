@@ -25,4 +25,6 @@ class UsuarioEditar:
     email: str
     telefone: int
     data_nascimento: str   
-    
+
+#------------------------------------------------------------------------------------------
+
