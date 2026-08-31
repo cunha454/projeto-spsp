@@ -3,27 +3,26 @@ from fastapi import APIRouter, HTTPException, status
 from src.repositories import solicitacao_repository
 from src.schemas.solicitacao import SolicitacaoCadastro, SolicitacaoEditar
 
+router: APIRouter = APIRouter(prefix="solicitacoes")
 
-router = APIRouter()
-
-@router.get("/solicitacao")
+@router.get("")
 def listar_solicitacoes():
     return solicitacao_repository.consultar_todos()
 
 
-@router.post("/solicitacao")
+@router.post("")
 def cadastrar_solicitacao(solicitacao: SolicitacaoCadastro):
     solicitacao_criada = solicitacao_repository.cadastrar(solicitacao)
     return solicitacao_criada
 
 
-@router.delete("/solicitacao/{id}")
+@router.delete("/{id}")
 def apagar(id: int):
     solicitacao_repository.apagar(id)
     return {"status": "OK"}
 
 
-@router.put("/solicitacao/{id}")
+@router.put("/{id}")
 def editar(id: int, solicitacao: SolicitacaoEditar):
     solicitacao_existente = solicitacao_repository.consultar_por_id(id)
 
@@ -37,7 +36,7 @@ def editar(id: int, solicitacao: SolicitacaoEditar):
     return {"status": "OK"}
 
 
-@router.get("/solicitacao/{id}")
+@router.get("/{id}")
 def consultar_por_id(id: int):
     solicitacao = solicitacao_repository.consultar_por_id(id)
 

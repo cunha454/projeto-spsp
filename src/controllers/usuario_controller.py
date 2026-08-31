@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException, status
 from src.repositories import usuario_repository
 from src.schemas.usuario import UsuarioCadastro, UsuarioEditar
 
-router: APIRouter = APIRouter(prefix="/usuario")
+router: APIRouter = APIRouter(prefix="/usuarios")
 
 
 
