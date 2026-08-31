@@ -1,25 +1,25 @@
 from fastapi import APIRouter, HTTPException, status
 
 from src.repositories import servico_repository
-from src.schemas.servico import ServicoCadastro, ServicoEditar
+from src.schemas.servico_schema import ServicoCadastro, ServicoEditar
 
 router = APIRouter()
 
-@router.get("/servico")
+@router.get("/servicos")
 def listar_servicos():
     return servico_repository.consultar_todos()
 
-@router.post("/servico")
+@router.post("/servicos")
 def cadastrar_servico(servico: ServicoCadastro):
     servico_criado = servico_repository.cadastrar(servico)
     return servico_criado
 
-@router.delete("/servico/{id}")
+@router.delete("/servicos/{id}")
 def apagar(id: int):
     servico_repository.apagar(id)
     return {"status": "OK"}
 
-@router.get("/servico/{id}")
+@router.get("/servicos/{id}")
 def consultar_por_id(id: int):
     servico = servico_repository.consultar_por_id(id)
 
@@ -31,7 +31,7 @@ def consultar_por_id(id: int):
 
     return servico
 
-@router.put("/servico/{id}")
+@router.put("/servicos/{id}")
 def editar(id: int, servico: ServicoEditar):
     servico_existente = servico_repository.consultar_por_id(id)
 

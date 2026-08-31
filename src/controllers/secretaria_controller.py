@@ -1,25 +1,25 @@
 from fastapi import APIRouter, HTTPException, status
 
 from src.repositories import secretaria_repository
-from src.schemas.secretaria import SecretariaCadastro, SecretariaEditar
+from src.schemas.secretaria_schema import SecretariaCadastro, SecretariaEditar
 
 router = APIRouter()
 
-@router.get("/secretaria")
+@router.get("/secretarias")
 def listar_secretarias():
     return secretaria_repository.consultar_todos()
 
-@router.post("/secretaria")
+@router.post("/secretarias")
 def cadastrar_secretaria(secretaria: SecretariaCadastro):
     secretaria_criada = secretaria_repository.cadastrar(secretaria)
     return secretaria_criada
 
-@router.delete("/secretaria/{id}")
+@router.delete("/secretarias/{id}")
 def apagar(id: int):
     secretaria_repository.apagar(id)
     return {"status": "OK"}
 
-@router.get("/secretaria/{id}")
+@router.get("/secretarias/{id}")
 def consultar_por_id(id: int):
     secretaria = secretaria_repository.consultar_por_id(id)
 
@@ -32,7 +32,7 @@ def consultar_por_id(id: int):
     return secretaria
 
 
-@router.put("/secretaria/{id}")
+@router.put("/secretarias/{id}")
 def editar(id: int, secretaria: SecretariaEditar):
     secretaria_existente = secretaria_repository.consultar_por_id(id)
 
