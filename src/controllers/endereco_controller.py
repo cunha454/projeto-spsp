@@ -3,21 +3,21 @@ from fastapi import APIRouter, HTTPException, status
 from src.repositories import endereco_repository
 from src.schemas.endereco import EnderecoCadastro, EnderecoEditar 
 
-router: APIRouter = APIRouter(prefix="/endereco")
+router: APIRouter = APIRouter()
 
 
 # @router.get("/pokemons")
-@router.get("")
+@router.get("/enderecos")
 def listar_enderecos():
     return endereco_repository.consultar_todos()
 
 
-@router.post("")
+@router.post("/enderecos")
 def cadastrar(endereco: EnderecoCadastro):
     return endereco_repository.cadastrar(endereco)
 
 
-@router.put("/{id}")
+@router.put("/enderecos/{id}")
 def editar(id: int, endereco: EnderecoEditar):
     endereco_banco = endereco_repository.consultar_por_id(id)
 
@@ -30,7 +30,7 @@ def editar(id: int, endereco: EnderecoEditar):
     }
 
 
-@router.delete("/{id}")
+@router.delete("/enderecos/{id}")
 def apagar(id: int):
     endereco = endereco_repository.consultar_por_id(id)
 
@@ -44,7 +44,7 @@ def apagar(id: int):
     }
 
 
-@router.get("/{id}")
+@router.get("/enderecos/{id}")
 def consultar_por_id(id: int):
     endereco = endereco_repository.consultar_por_id(id)
 

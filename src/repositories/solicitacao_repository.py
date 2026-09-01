@@ -8,13 +8,13 @@ def consultar_todos() -> list[Solicitacao]:
     """Responsável por consultar todos os clientes"""
 
     sql = """SELECT
-    solicitacao.id
-    solicitacao.descricao
-    solicitacao.data_solicitacao
-    solicitacao.status
-    solicitacao.id_endereco
-    solicitacao.id_servico
-    solicitacao.id_funcionario
+    solicitacao.id,
+    solicitacao.descricao,
+    solicitacao.data_solicitacao,
+    solicitacao.status,
+    solicitacao.id_endereco,
+    solicitacao.id_servico,
+    solicitacao.id_funcionario,
     FROM solicitacao
 """
     with conectar() as conexao:
@@ -34,7 +34,8 @@ def consultar_todos() -> list[Solicitacao]:
             id_funcionario=registro[6]
         )
 
-    solicitacoes.append(solicitacao)
+        solicitacoes.append(solicitacao)
+        
     return solicitacoes
 
 
