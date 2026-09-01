@@ -6,18 +6,18 @@ from src.schemas.usuario import Usuario
 @dataclass
 class Endereco:
     id: int
-    cep: int
+    cep: str
     estado: str
     cidade: str
     bairro: str
     logradouro: str
     usuario = Usuario
-
+    
 
 @dataclass
 class EnderecoCadastro:
     id: int
-    cep: int
+    cep: str
     estado: str
     cidade: str
     bairro: str
@@ -28,7 +28,7 @@ class EnderecoCadastro:
 @dataclass
 class EnderecoEditar:
      id: int
-     cep: int
+     cep: str
      estado: str
      cidade: str
      bairro: str

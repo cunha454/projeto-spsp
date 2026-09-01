@@ -6,64 +6,70 @@ from src.schemas.usuario import Usuario
 
 
 def consultar_todos() -> list[Endereco]:
-    """Responsável por consultar todos os enderecos incluindo seu usuario"""
-    sql = """SELECT
-    endereco.id,
-    endereco.cep,
-    endereco.estado,
-    endereco.cidade,
-    endereco.bairro,
-    endereco.logradouro,
-    endereco.id_usuario,
-    usuario.nome
-    
-   
-FROM endereco
-INNER JOIN usuario ON(endereco.id_usuario = usuario.id)
-WHERE endereco.registro_ativo = 1"""
+    """Responsável por consultar todos os endereços incluindo seu usuário"""
+
+    sql = """
+        SELECT
+            endereco.id,
+            endereco.cep,
+            endereco.estado,
+            endereco.cidade,
+            endereco.bairro,
+            endereco.logradouro,
+            endereco.id_usuario,
+            usuario.nome
+        FROM endereco
+        INNER JOIN usuario ON endereco.id_usuario = usuario.id
+    """
+
     with conectar() as conexao:
         with conexao.cursor() as cursor:
             cursor.execute(sql)
             registros = cursor.fetchall()
 
-    endereco: list[Endereco] = []
+    enderecos: list[Endereco] = []
+
     for registro in registros:
-        # Instanciar um objeto da classe Categoria
-        usuario: Usuario = Usuario(
-            id=registro[0],
-            nome=registro[1]
+
+        usuario = Usuario(
+            id=registro[6],
+            nome=registro[7]
         )
 
-        registro_ativo = False
-        if registro[8] == 1:
-            registro_ativo = True
-
-        # Instanciar um objeto da classe Pokemon
-        Endereco: Endereco = Endereco(
+        endereco = Endereco(
             id=registro[0],
             cep=registro[1],
             estado=registro[2],
             cidade=registro[3],
             bairro=registro[4],
             logradouro=registro[5],
-            usuario=usuario,
-            registro_ativo=registro_ativo
+            usuario=usuario
         )
 
-        endereco.append(endereco)
-    return endereco
+        enderecos.append(endereco)
+
+    return enderecos
+
 
 
 def cadastrar(endereco: EnderecoCadastro) -> Endereco:
     sql = """INSERT INTO endereco 
-    (cep, estado, cidade, bairro, logradouro, id_usuario)
-    VALUES (%s, %s, %s, %s, %s, %s)
-    """
+    (cep, estado, cidade, bairro, logradouro, id_usuario) 
+    VALUES (%s, %s, %s, %s, %s, %s)"""
+    
     with conectar() as conexao:
         with conexao.cursor() as cursor:
-            cursor.execute(sql, (endereco.cep, endereco.estado, endereco.cidade, endereco.bairro, endereco.logradouro, endereco.id_usuario))
+            cursor.execute(sql, (
+                endereco.cep, 
+                endereco.estado, 
+                endereco.cidade, 
+                endereco.bairro, 
+                endereco.logradouro, 
+                endereco.id_usuario
+            ))
             novo_id = cursor.lastrowid
-            conexao.commit()
+            conexao.commit()  
+            
     return Endereco(
         id=novo_id,
         cep=endereco.cep,
@@ -71,8 +77,7 @@ def cadastrar(endereco: EnderecoCadastro) -> Endereco:
         cidade=endereco.cidade,
         bairro=endereco.bairro,
         logradouro=endereco.logradouro,
-        usuario=None,
-        registro_ativo=True
+        usuario=None
     )
 
 def editar(id: int, endereco: EnderecoEditar):
@@ -96,7 +101,7 @@ def editar(id: int, endereco: EnderecoEditar):
                 endereco.id_usuario,
                 id,
             ))
-            conexao.commit()
+            conexao.commit()    
 
 
 def apagar(id: int):
