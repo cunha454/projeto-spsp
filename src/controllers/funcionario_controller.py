@@ -1,25 +1,25 @@
 from fastapi import APIRouter, HTTPException, status
 
 from src.repositories import funcionario_repository
-from src.schemas.funcionario import FuncionarioCadastro, FuncionarioEditar
+from src.schemas.funcionario_schema import FuncionarioCadastro, FuncionarioEditar
 
 router = APIRouter()
 
-@router.get("/funcionario")
+@router.get("/funcionarios")
 def listar_funcionarios():
     return funcionario_repository.consultar_todos()
 
-@router.post("/funcionario")
+@router.post("/funcionarios")
 def cadastrar_funcionario(funcionario: FuncionarioCadastro):
     funcionario_criado = funcionario_repository.cadastrar(funcionario)
     return funcionario_criado
 
-@router.delete("/funcionario/{id}")
+@router.delete("/funcionarios/{id}")
 def apagar(id: int):
     funcionario_repository.apagar(id)
     return {"status": "OK"}
 
-@router.get("/funcionario/{id}")
+@router.get("/funcionarios/{id}")
 def consultar_por_id(id: int):
     funcionario = funcionario_repository.consultar_por_id(id)
 
@@ -30,7 +30,7 @@ def consultar_por_id(id: int):
         )
     return funcionario
 
-@router.put("/funcionario/{id}")
+@router.put("/funcionarios/{id}")
 def editar(id: int, funcionario: FuncionarioEditar):
     funcionario_existente = funcionario_repository.consultar_por_id(id)
 

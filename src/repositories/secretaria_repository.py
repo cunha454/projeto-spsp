@@ -1,7 +1,7 @@
 from typing import List, Optional
 
 from src.database.conexao import conectar
-from src.schemas.secretaria import Secretaria, SecretariaCadastro, SecretariaEditar
+from src.schemas.secretaria_schema import Secretaria, SecretariaCadastro, SecretariaEditar
 
 def consultar_todos() -> List[Secretaria]:
     with conectar() as conexao:
