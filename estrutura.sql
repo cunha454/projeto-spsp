@@ -24,8 +24,10 @@ CREATE TABLE endereco (
     bairro VARCHAR(32) NOT NULL,
     logradouro VARCHAR(32) NOT NULL,
     id_usuario INT NOT NULL,
+    registro_ativo TINYINT(1) NOT NULL DEFAULT 1,
     FOREIGN KEY (id_usuario) REFERENCES usuario(id)
 );
+
 
 
 -- SECRETARIA

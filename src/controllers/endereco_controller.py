@@ -14,7 +14,8 @@ def listar_enderecos():
 
 @router.post("/enderecos")
 def cadastrar(endereco: EnderecoCadastro):
-    return endereco_repository.cadastrar(endereco)
+    endereco_criado = endereco_repository.cadastrar(endereco)
+    return endereco_criado
 
 
 @router.put("/enderecos/{id}")
@@ -37,11 +38,13 @@ def apagar(id: int):
     if endereco is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Endereço não encontrado")
 
-
     endereco_repository.apagar(id)
+
     return {
-        "status": "ok"
+        "status": "ok",
+        "mensagem": "Endereço apagado com sucesso"
     }
+
 
 
 @router.get("/enderecos/{id}")

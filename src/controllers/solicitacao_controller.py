@@ -13,12 +13,19 @@ def listar_solicitacoes():
 
 @router.post("/solicitacoes")
 def cadastrar_solicitacao(solicitacao: SolicitacaoCadastro):
-    solicitacao_criada = solicitacao_repository.cadastrar(solicitacao)
-    return solicitacao_criada
+    return solicitacao_repository.cadastrar(solicitacao)
 
 
 @router.delete("/solicitacoes/{id}")
 def apagar(id: int):
+    solicitacao_existente = solicitacao_repository.consultar_por_id(id)
+
+    if solicitacao_existente is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Solicitação não encontrada"
+        )
+
     solicitacao_repository.apagar(id)
     return {"status": "OK"}
 
@@ -29,8 +36,8 @@ def editar(id: int, solicitacao: SolicitacaoEditar):
 
     if solicitacao_existente is None:
         raise HTTPException(
-            status.HTTP_404_NOT_FOUND,
-            detail="Funcionário não encontrado"
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Solicitação não encontrada"
         )
 
     solicitacao_repository.editar(id, solicitacao)
@@ -43,7 +50,8 @@ def consultar_por_id(id: int):
 
     if solicitacao is None:
         raise HTTPException(
-            status.HTTP_404_NOT_FOUND,
-            detail="Funcionário não encontrado"
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Solicitação não encontrada"
         )
+
     return solicitacao

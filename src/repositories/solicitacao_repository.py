@@ -5,26 +5,27 @@ from src.schemas.solicitacao import Solicitacao, SolicitacaoCadastro, Solicitaca
 
 
 def consultar_todos() -> list[Solicitacao]:
-    """Responsável por consultar todos os clientes"""
+    sql = """
+        SELECT
+            id,
+            descricao,
+            data_solicitacao,
+            status,
+            id_endereco,
+            id_servico,
+            id_funcionario
+        FROM solicitacao
+    """
 
-    sql = """SELECT
-    solicitacao.id,
-    solicitacao.descricao,
-    solicitacao.data_solicitacao,
-    solicitacao.status,
-    solicitacao.id_endereco,
-    solicitacao.id_servico,
-    solicitacao.id_funcionario,
-    FROM solicitacao
-"""
     with conectar() as conexao:
         with conexao.cursor() as cursor:
             cursor.execute(sql)
             registros = cursor.fetchall()
 
     solicitacoes: list[Solicitacao] = []
+
     for registro in registros:
-        solicitacao: Solicitacao = Solicitacao(
+        solicitacao = Solicitacao(
             id=registro[0],
             descricao=registro[1],
             data_solicitacao=registro[2],
@@ -33,14 +34,22 @@ def consultar_todos() -> list[Solicitacao]:
             id_servico=registro[5],
             id_funcionario=registro[6]
         )
-
         solicitacoes.append(solicitacao)
-        
+
     return solicitacoes
 
 
 def cadastrar(solicitacao: SolicitacaoCadastro):
-    sql = "INSERT INTO solicitacao (descricao, data_solicitacao, status,  id_endereco, id_servico, id_funcionario) VALUES (%s, %s, %s, %s, %s)"
+    sql = """
+        INSERT INTO solicitacao (
+            descricao,
+            data_solicitacao,
+            status,
+            id_endereco,
+            id_servico,
+            id_funcionario
+        ) VALUES (%s, %s, %s, %s, %s, %s)
+    """
 
     with conectar() as conexao:
         with conexao.cursor() as cursor:
@@ -55,9 +64,8 @@ def cadastrar(solicitacao: SolicitacaoCadastro):
                     solicitacao.id_funcionario
                 )
             )
-
-            novo_id = cursor.lastrowid
             conexao.commit()
+            novo_id = cursor.lastrowid
 
     return Solicitacao(
         id=novo_id,
@@ -80,7 +88,16 @@ def apagar(id: int):
 
 
 def editar(id: int, solicitacao: SolicitacaoEditar):
-    sql = "UPDATE solicitacao SET descricao = %s, data_solicitacao = %s, status = %s, id_servico = %s, id_endereco = %s,id_funcionario = %s WHERE id = %s"
+    sql = """
+        UPDATE solicitacao SET
+            descricao = %s,
+            data_solicitacao = %s,
+            status = %s,
+            id_endereco = %s,
+            id_servico = %s,
+            id_funcionario = %s
+        WHERE id = %s
+    """
 
     with conectar() as conexao:
         with conexao.cursor() as cursor:
@@ -100,7 +117,18 @@ def editar(id: int, solicitacao: SolicitacaoEditar):
 
 
 def consultar_por_id(id: int) -> Optional[Solicitacao]:
-    sql = "SELECT id, descricao, data_solicitacao, status, id_endereco, id_servico, id_funcionario FROM solicitacao WHERE id = %s"
+    sql = """
+        SELECT
+            id,
+            descricao,
+            data_solicitacao,
+            status,
+            id_endereco,
+            id_servico,
+            id_funcionario
+        FROM solicitacao
+        WHERE id = %s
+    """
 
     with conectar() as conexao:
         with conexao.cursor() as cursor:
@@ -117,4 +145,5 @@ def consultar_por_id(id: int) -> Optional[Solicitacao]:
         status=registro[3],
         id_endereco=registro[4],
         id_servico=registro[5],
-        id_funcionario=registro[6])
+        id_funcionario=registro[6]
+    )
