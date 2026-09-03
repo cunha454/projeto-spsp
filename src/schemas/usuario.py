@@ -11,7 +11,6 @@ class Usuario:
 
 @dataclass
 class UsuarioCadastro:
-    id: int
     nome: str
     email: str
     telefone: int

@@ -10,10 +10,10 @@ def consultar_todos() -> list[Usuario]:
     """Responsável por consultar todos os clientes"""
 
     sql = """SELECT
-    usuario.id
-    usuario.nome
-    usuario.email
-    usuario.telefone
+    usuario.id,
+    usuario.nome,
+    usuario.email,
+    usuario.telefone,
     usuario.data_nascimento
     FROM usuario
 """
@@ -31,8 +31,8 @@ def consultar_todos() -> list[Usuario]:
             telefone=registro[3],
             data_nascimento=registro[4]
         )
+        usuarios.append(usuario)
 
-    usuarios.append(usuario)
     return usuarios
 
 
@@ -61,7 +61,7 @@ def editar(id: int, usuario: UsuarioEditar):
         nome=%s,
         email=%s,
         telefone=%s,
-        data_nascimento=%s,
+        data_nascimento=%s
     WHERE id=%s
     """
     with conectar() as conexao:
@@ -77,21 +77,30 @@ def editar(id: int, usuario: UsuarioEditar):
 
 
 def consultar_por_id(id: int) -> Optional[Usuario]:
-    """Reponsável por consultar o usuário filtrando por id"""
-    sql = "SELECT id, nome FROM usuario WHERE id = %s"
+    sql = "SELECT id, nome, email, telefone, data_nascimento FROM usuario WHERE id = %s"
+
     with conectar() as conexao:
         with conexao.cursor() as cursor:
             cursor.execute(sql, (id,))
             registro = cursor.fetchone()
+
     if registro is None:
         return None
-    return Usuario(id=registro[0], nome=registro[1])
+
+    return Usuario(
+        id=registro[0],
+        nome=registro[1],
+        email=registro[2],
+        telefone=registro[3],
+        data_nascimento=registro[4]
+    )
+
+
 
 
 def apagar(id: int):
-    # Alternativa para n apagar o registro fisicamente
-    # Desativar o registro, atualizando o registro_ativo
-    sql = "UPDATE usuario SET registro_ativo = 0 WHERE id = %s"
+    sql = "DELETE FROM usuario WHERE id = %s"
+
     with conectar() as conexao:
         with conexao.cursor() as cursor:
             cursor.execute(sql, (id,))
