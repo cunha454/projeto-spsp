@@ -5,7 +5,7 @@ class Usuario:
     id: int
     nome: str
     email: str
-    telefone: int
+    telefone: str
     data_nascimento: str   
 
 
@@ -13,17 +13,15 @@ class Usuario:
 class UsuarioCadastro:
     nome: str
     email: str
-    telefone: int
+    telefone: str
     data_nascimento: str   
 
 
 @dataclass
 class UsuarioEditar:
-    id: int
     nome: str
     email: str
-    telefone: int
+    telefone: str
     data_nascimento: str   
 
 #------------------------------------------------------------------------------------------
-

@@ -9,7 +9,6 @@ def consultar_todos():
     sql = """
         SELECT id, cep, estado, cidade, bairro, logradouro, id_usuario
         FROM endereco
-        WHERE registro_ativo = 1
     """
 
     with conectar() as conexao:
@@ -94,7 +93,7 @@ def editar(id: int, endereco: EnderecoEditar):
 
 
 def apagar(id: int):
-    sql = "UPDATE endereco SET registro_ativo = 0 WHERE id = %s"
+    sql = "DELETE FROM endereco WHERE id = %s"
 
     with conectar() as conexao:
         with conexao.cursor() as cursor:
@@ -106,13 +105,11 @@ def apagar(id: int):
 
 from typing import Optional
 
-from typing import Optional
-
 def consultar_por_id(id: int):
     sql = """
         SELECT id, cep, estado, cidade, bairro, logradouro, id_usuario
         FROM endereco
-        WHERE id = %s AND registro_ativo = 1
+        WHERE id = %s
     """
 
     with conectar() as conexao:
@@ -132,6 +129,5 @@ def consultar_por_id(id: int):
         logradouro=registro[5],
         id_usuario=registro[6]
     )
-
 
 

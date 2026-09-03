@@ -1,5 +1,8 @@
-# Ambiente virtual
+# Ambientes virtuais
+.venv/
+venv/
 env/
+ENV/
 
 # Python
 __pycache__/
@@ -8,6 +11,8 @@ __pycache__/
 
 # Testes
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
 .coverage
 htmlcov/
 
@@ -16,10 +21,23 @@ htmlcov/
 
 # Variáveis de ambiente
 .env
+.env.*
+!.env.example
 
 # IDEs
 .vscode/
 .idea/
+
+# Builds e pacotes gerados
+build/
+dist/
+*.egg-info/
+
+# Bancos locais e arquivos temporários
+*.sqlite
+*.sqlite3
+*.db
+*.tmp
 
 # Sistema operacional
 .DS_Store
