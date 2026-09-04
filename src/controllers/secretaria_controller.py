@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, status
 
 from src.repositories import secretaria_repository
 from src.schemas.secretaria_schema import SecretariaCadastro, SecretariaEditar
+from src.validation import validate_secretaria
 
 router = APIRouter()
 
@@ -11,6 +12,7 @@ def listar_secretarias():
 
 @router.post("/secretarias")
 def cadastrar_secretaria(secretaria: SecretariaCadastro):
+    validate_secretaria(secretaria)
     secretaria_criada = secretaria_repository.cadastrar(secretaria)
     return secretaria_criada
 
@@ -42,6 +44,7 @@ def editar(id: int, secretaria: SecretariaEditar):
             detail="Secretaria não encontrada"
     )
 
+    validate_secretaria(secretaria)
+
     secretaria_repository.editar(id, secretaria)
     return {"status": "OK"}
-

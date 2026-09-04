@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException, status
 
-from src.repositories import endereco_repository
+from src.repositories import endereco_repository, usuario_repository
 from src.schemas.endereco import EnderecoCadastro, EnderecoEditar 
+from src.validation import validate_endereco, validate_relation
 
 router: APIRouter = APIRouter()
 
@@ -14,6 +15,8 @@ def listar_enderecos():
 
 @router.post("/enderecos")
 def cadastrar(endereco: EnderecoCadastro):
+    validate_endereco(endereco)
+    validate_relation(usuario_repository, endereco.id_usuario, "usuário")
     endereco_criado = endereco_repository.cadastrar(endereco)
     return endereco_criado
 
@@ -24,6 +27,9 @@ def editar(id: int, endereco: EnderecoEditar):
 
     if endereco_banco is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Endereço não encontrado")
+
+    validate_endereco(endereco)
+    validate_relation(usuario_repository, endereco.id_usuario, "usuário")
 
     endereco_repository.editar(id, endereco)
     return {

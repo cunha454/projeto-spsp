@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException, status
 
-from src.repositories import solicitacao_repository
+from src.repositories import endereco_repository, funcionario_repository, solicitacao_repository, servico_repository
 from src.schemas.solicitacao import SolicitacaoCadastro, SolicitacaoEditar
+from src.validation import validate_relation, validate_solicitacao
 
 router: APIRouter = APIRouter()
 
@@ -13,6 +14,10 @@ def listar_solicitacoes():
 
 @router.post("/solicitacoes")
 def cadastrar_solicitacao(solicitacao: SolicitacaoCadastro):
+    validate_solicitacao(solicitacao)
+    validate_relation(endereco_repository, solicitacao.id_endereco, "endereço")
+    validate_relation(servico_repository, solicitacao.id_servico, "serviço")
+    validate_relation(funcionario_repository, solicitacao.id_funcionario, "funcionário")
     return solicitacao_repository.cadastrar(solicitacao)
 
 
@@ -39,6 +44,11 @@ def editar(id: int, solicitacao: SolicitacaoEditar):
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Solicitação não encontrada"
         )
+
+    validate_solicitacao(solicitacao)
+    validate_relation(endereco_repository, solicitacao.id_endereco, "endereço")
+    validate_relation(servico_repository, solicitacao.id_servico, "serviço")
+    validate_relation(funcionario_repository, solicitacao.id_funcionario, "funcionário")
 
     solicitacao_repository.editar(id, solicitacao)
     return {"status": "OK"}

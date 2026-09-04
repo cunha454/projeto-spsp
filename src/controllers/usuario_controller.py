@@ -4,6 +4,7 @@ from fastapi import APIRouter, HTTPException, status
 
 from src.repositories import usuario_repository
 from src.schemas.usuario import UsuarioCadastro, UsuarioEditar
+from src.validation import validate_usuario
 
 router: APIRouter = APIRouter()
 
@@ -15,6 +16,7 @@ def listar_usuarios():
 
 @router.post("/usuarios")
 def cadastrar(usuario: UsuarioCadastro):
+    validate_usuario(usuario)
     return usuario_repository.cadastrar(usuario)
 
 
@@ -24,6 +26,8 @@ def editar(id: int, usuario: UsuarioEditar):
 
     if usuario_banco is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Usuario não encontrado")
+
+    validate_usuario(usuario)
 
     usuario_repository.editar(id, usuario)
     return {

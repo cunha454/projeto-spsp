@@ -51,6 +51,11 @@ function validateField(field, input) {
   if (field.mask === 'phone' && value && !/^\(\d{2}\) \d{4,5}-\d{4}$/.test(value)) message = 'Informe um telefone com DDD válido.';
   if (field.mask === 'cep' && value && !/^\d{5}-\d{3}$/.test(value)) message = 'Informe um CEP válido no formato 00000-000.';
   if (field.name === 'data_nascimento' && value && new Date(`${value}T00:00:00`) > new Date()) message = 'A data de nascimento não pode estar no futuro.';
+  if (field.name === 'data_solicitacao' && value) {
+    const today = new Date();
+    const currentDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    if (value.slice(0, 10) > currentDate) message = 'A data da solicitação não pode ser posterior a hoje.';
+  }
   input.setCustomValidity(message);
   return !message;
 }

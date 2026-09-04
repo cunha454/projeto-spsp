@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException, status
 
-from src.repositories import servico_repository
+from src.repositories import servico_repository, secretaria_repository
 from src.schemas.servico_schema import ServicoCadastro, ServicoEditar
+from src.validation import validate_servico, validate_relation
 
 router = APIRouter()
 
@@ -11,6 +12,8 @@ def listar_servicos():
 
 @router.post("/servicos")
 def cadastrar_servico(servico: ServicoCadastro):
+    validate_servico(servico)
+    validate_relation(secretaria_repository, servico.id_secretaria, "secretaria")
     servico_criado = servico_repository.cadastrar(servico)
     return servico_criado
 
@@ -40,6 +43,9 @@ def editar(id: int, servico: ServicoEditar):
             status.HTTP_404_NOT_FOUND,
             detail="Serviço não encontrado"
         )
+
+    validate_servico(servico)
+    validate_relation(secretaria_repository, servico.id_secretaria, "secretaria")
 
     servico_repository.editar(id, servico)
     return {"status": "OK"}
