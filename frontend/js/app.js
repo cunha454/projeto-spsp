@@ -38,13 +38,14 @@ document.addEventListener('click', event => {
   const { action: name, resource, id } = action.dataset;
   if (name === 'go-resource') return selectView(resource);
   const record = (state.records[resource] || []).find(item => String(item.id) === id);
-  if (name === 'create') openForm(resource, null, reloadCurrent);
-  if (name === 'edit' && record) openForm(resource, record, reloadCurrent);
+  if (name === 'create') openForm(resource, null, state.records, reloadCurrent);
+  if (name === 'edit' && record) openForm(resource, record, state.records, reloadCurrent);
   if (name === 'view' && record) openDetails(resource, record, state.records);
   if (name === 'delete' && record) confirmDelete(resource, record, reloadCurrent);
 });
 document.addEventListener('input', event => { if (event.target.id !== 'table-search') return; const query = event.target.value.toLowerCase(); const records = (state.records[state.view] || []).filter(record => Object.values(record).join(' ').toLowerCase().includes(query)); document.querySelector('#resource-table-body').innerHTML = tableRows(state.view, records, state.records); });
 document.querySelectorAll('.nav-link').forEach(link => link.addEventListener('click', event => { event.preventDefault(); selectView(link.dataset.view); }));
-document.querySelector('#refresh-button').addEventListener('click', reloadCurrent);
+document.querySelector('#refresh-button')?.remove();
+document.querySelector('.sidebar-footer')?.remove();
 document.querySelector('#menu-toggle').addEventListener('click', () => document.querySelector('#sidebar').classList.toggle('open'));
 setNav(state.view); render();

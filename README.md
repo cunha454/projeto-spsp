@@ -1,24 +1,58 @@
 # Serviço de Prestação de Serviços da Prefeitura (SPSP)
 
-## Executar
+## Como iniciar o projeto
 
-1. Inicie o MySQL e confira as credenciais em `src/.env`.
-2. Crie o banco e carregue os dados de desenvolvimento:
+### Pré-requisitos
 
-   ```bash
-   mysql -h 127.0.0.1 -P 3306 -u root -p < estrutura.sql
-   ```
+- Python 3
+- MySQL em execução
 
-   O script recria o banco `spsp` e insere 20 usuários, endereços, serviços,
-   funcionários e solicitações, além de 5 secretarias.
+### 1. Configure o banco de dados
 
-3. Instale e execute a API:
+Confira as credenciais usadas pela API no arquivo `src/.env`. Elas precisam apontar
+para o MySQL local e para o banco `spsp`.
 
-   ```bash
-   python -m venv .venv
-   .venv/bin/python -m pip install -r requirements.txt
-   .venv/bin/uvicorn src.app:app --reload
-   ```
+Depois, na raiz do projeto, crie o banco e carregue os dados de desenvolvimento:
 
-A API fica em `http://127.0.0.1:8000`; confira `GET /health` ou a documentação
-em `/docs`. Para o frontend, abra `frontend/index.html` com um servidor local na porta 5500.
+```bash
+mysql -h 127.0.0.1 -P 3306 -u root -p < estrutura.sql
+```
+
+O comando solicita a senha do MySQL, recria o banco `spsp` e insere dados de exemplo.
+
+Se o banco já foi criado antes desta atualização, padronize os telefones existentes
+sem apagar os dados:
+
+```bash
+mysql -h 127.0.0.1 -P 3306 -u root -p < atualizar_formatos.sql
+```
+
+### 2. Inicie a API
+
+Ainda na raiz do projeto, crie o ambiente virtual, instale as dependências e execute
+a aplicação:
+
+```bash
+python -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/uvicorn src.app:app --reload
+```
+
+A API estará disponível em `http://127.0.0.1:8000`.
+
+### 3. Inicie o frontend
+
+Abra outro terminal na raiz do projeto e execute:
+
+```bash
+.venv/bin/python -m http.server 5500 --bind 127.0.0.1 --directory frontend
+```
+
+Abra `http://127.0.0.1:5500` no navegador.
+
+## Endereços úteis
+
+- Frontend: `http://127.0.0.1:5500`
+- API: `http://127.0.0.1:8000`
+- Documentação da API: `http://127.0.0.1:8000/docs`
+- Verificação da API: `http://127.0.0.1:8000/health`

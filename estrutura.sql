@@ -113,6 +113,10 @@ INSERT INTO funcionario (nome, cargo, telefone, email, id_secretaria) VALUES
 ('Kelly Ramos','Técnica de obras','1198000-0011','kelly.ramos@example.com',1), ('Leandro Costa','Médico','1198000-0012','leandro.costa@example.com',2), ('Marta Silva','Pedagoga','1198000-0013','marta.silva@example.com',3), ('Nelson Lima','Jardineiro','1198000-0014','nelson.lima@example.com',4), ('Otávio Rocha','Motorista','1198000-0015','otavio.rocha@example.com',5),
 ('Patricia Souza','Fiscal de obras','1198000-0016','patricia.souza@example.com',1), ('Renato Campos','Dentista','1198000-0017','renato.campos@example.com',2), ('Sara Freitas','Secretária escolar','1198000-0018','sara.freitas@example.com',3), ('Tales Barros','Gestor ambiental','1198000-0019','tales.barros@example.com',4), ('Valeria Pinto','Operadora','1198000-0020','valeria.pinto@example.com',5);
 
+-- Mantém os dados de desenvolvimento no mesmo formato aplicado pelo frontend.
+UPDATE usuario SET telefone = CONCAT('(', LEFT(telefone, 2), ') ', SUBSTRING(telefone, 3, 5), '-', RIGHT(telefone, 4));
+UPDATE funcionario SET telefone = CONCAT('(', LEFT(telefone, 2), ') ', SUBSTRING(telefone, 3, 5), '-', RIGHT(telefone, 4));
+
 INSERT INTO solicitacao (descricao, status, id_endereco, id_servico, id_funcionario) VALUES
 ('Buraco em frente à residência','Pendente',1,1,1), ('Árvore precisa de poda','Em análise',2,2,4), ('Consulta clínica','Concluída',3,3,2), ('Vaga em escola','Pendente',4,4,3), ('Placa danificada','Em análise',5,5,5),
 ('Poste apagado','Pendente',6,6,6), ('Vacinação infantil','Concluída',7,7,7), ('Transporte para aluno','Pendente',8,8,8), ('Solicitação de coleta','Em análise',9,9,9), ('Semáforo com defeito','Pendente',10,10,10),
